@@ -1,5 +1,5 @@
 SLACK_CHANNEL_NAME: "jenkins-update"
 ENVIRONMENT: "prod"
-CODE_BASE_PATH : "Ansible-sonarqube-Install"
+CODE_BASE_PATH : "Sonarqube"
 ACTION_MESSAGE: "sonarqube deployment started"
 KEEP_APPROVAL_STAGE: true
