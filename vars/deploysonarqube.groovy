@@ -43,7 +43,7 @@ def call(Map config = [:]) {
                 fi
 
                 echo "🚀 Running Ansible Playbook..."
-                ansible-playbook -i inventory/aws_ec2.yml playbook.yml --extra-vars "env=${ENVIRONMENT}"
+                ansible-playbook -i aws_ec2.yaml playbook.yml --extra-vars "env=${ENVIRONMENT}"
             """
         }
     }
