@@ -1,7 +1,7 @@
 def call(Map config = [:]) {
     def SLACK_CHANNEL       = config.SLACK_CHANNEL_NAME ?: 'jenkins-update'
     def ENVIRONMENT         = config.ENVIRONMENT ?: 'dev'
-    def ACTION_MESSAGE      = config.ACTION_MESSAGE ?: "Deploying sonarqube to ${ENVIRONMENT}"
+    def ACTION_MESSAGE      = config.ACTION_MESSAGE ?: "Deploying SonarQube to ${ENVIRONMENT}"
     def CODE_BASE_PATH      = config.CODE_BASE_PATH ?: 'Ansible-sonarqube-Install'
     def KEEP_APPROVAL_STAGE = (config.KEEP_APPROVAL_STAGE ?: 'false').toBoolean()
 
@@ -14,7 +14,7 @@ def call(Map config = [:]) {
     if (KEEP_APPROVAL_STAGE) {
         stage('User Approval') {
             timeout(time: 5, unit: 'MINUTES') {
-                input message: "Do you want to proceed with sonarqube deployment to ${ENVIRONMENT}?"
+                input message: "Do you want to proceed with SonarQube deployment to ${ENVIRONMENT}?"
             }
         }
     }
@@ -24,22 +24,10 @@ def call(Map config = [:]) {
             sh """#!/bin/bash
                 set -e
 
-                echo "📂 Files inside the repo:"
+                echo "📂 Listing files in repo:"
                 ls -la
 
-                if [ ! -d "venv" ]; then
-                    echo "✅ Creating virtual environment..."
-                    python3 -m venv venv
-                fi
-
-                echo "✅ Activating virtual environment..."
-                source venv/bin/activate
-
-                echo "✅ Installing dependencies..."
-                pip install --upgrade pip
-                pip install ansible boto boto3
-
-                echo "✅ Running Ansible Playbook..."
+                echo "🚀 Running Ansible Playbook..."
                 ansible-playbook -i inventory/aws_ec2.yml playbook.yml --extra-vars "env=${ENVIRONMENT}"
             """
         }
