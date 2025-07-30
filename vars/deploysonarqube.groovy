@@ -27,6 +27,21 @@ def call(Map config = [:]) {
                 echo "📂 Listing files in repo:"
                 ls -la
 
+                # Check if ansible-playbook is available
+                if ! command -v ansible-playbook &>/dev/null; then
+                    echo "🔧 Ansible not found, setting up virtual environment..."
+                    sudo apt update
+                    sudo apt install -y python3-venv python3-pip
+
+                    python3 -m venv venv
+                    source venv/bin/activate
+                    pip install --upgrade pip
+                    pip install ansible boto boto3
+                    source venv/bin/activate
+                else
+                    echo "✅ Ansible is available globally."
+                fi
+
                 echo "🚀 Running Ansible Playbook..."
                 ansible-playbook -i inventory/aws_ec2.yml playbook.yml --extra-vars "env=${ENVIRONMENT}"
             """
